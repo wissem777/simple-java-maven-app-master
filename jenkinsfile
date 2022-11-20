@@ -1,24 +1,44 @@
-pipeline {  
+pipeline {
     agent any
     tools {
-        maven 'maven-3.8.2' }
-  stages { 
-    stage('Clone repository') {
+        maven 'maven-3.8.2' 
+    }
+    environment {
+        DATE = new Date().format('yy.M')
+        TAG = "${DATE}.${BUILD_NUMBER}"
+    }
+    stages {
+         stage('Clone repository') {
           checkout scm
-}
-     stage ('Build') {
+        }
+        stage ('Build') {
             steps {
                 sh 'mvn clean package'
             }
-    stage('Build image') {
-       dockerImage = docker.build("wissem777/simple-java-maven-app-master:latest")
+        }
+        stage('Docker Build') {
+            steps {
+                script {
+                     docker.build("wissem777/simple-java-maven-app-master:latest")
+                }
+            }
+        }
+	    stage('Pushing Docker Image to Dockerhub') {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker_credential') {
+                        docker.image("vigneshsweekaran/hello-world:${TAG}").push()
+                        docker.image("vigneshsweekaran/hello-world:${TAG}").push("latest")
+                    }
+                }
+            }
+        }
+        stage('Deploy'){
+            steps {
+                sh "docker stop hello-world | true"
+                sh "docker rm hello-world | true"
+                sh "docker run --name hello-world -d -p 9004:8080 vigneshsweekaran/hello-world:${TAG}"
+            }
+        }
     }
-    
- stage('Push image') {
-        withDockerRegistry([ credentialsId: "dockerhubaccount", url: "" ]) {
-        dockerImage.push()
-        }  
-    }    
-}
-}
 }
