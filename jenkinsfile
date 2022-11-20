@@ -8,8 +8,8 @@ pipeline {
         TAG = "${DATE}.${BUILD_NUMBER}"
     }
     stages {
-         stage('Clone repository') 
-         steps{
+        stage('Clone repository') 
+            steps{
               checkout scm }
         }
         stage ('Build') {
