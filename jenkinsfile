@@ -1,8 +1,15 @@
-node {   
+node {  
+    agent any
+    tools {
+        maven 'maven-3.8.2' }
+
     stage('Clone repository') {
           checkout scm
 }
-    
+     stage ('Build') {
+            steps {
+                sh 'mvn clean package'
+            }
     stage('Build image') {
        dockerImage = docker.build("wissem777/simple-java-maven-app-master:latest")
     }
