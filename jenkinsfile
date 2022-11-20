@@ -1,0 +1,15 @@
+node {   
+    stage('Clone repository') {
+         checkout scm
+}
+    
+    stage('Build image') {
+       dockerImage = docker.build("wissem777/simple-java-maven-app-master:latest")
+    }
+    
+ stage('Push image') {
+        withDockerRegistry([ credentialsId: "dockerhubaccount", url: "" ]) {
+        dockerImage.push()
+        }
+    }    
+}
