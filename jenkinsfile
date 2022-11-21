@@ -6,7 +6,7 @@ pipeline {
     environment {
         DATE = new Date().format('yy.M')
         TAG = "${DATE}.${BUILD_NUMBER}"
-        registry = "wi77739ssem/first-push"
+        registry = "wi77739ssem/simple-java-maven-app-master"
         registryCredential = '3c467691-f056-4b5b-be31-59fff446f66a'
         dockerImage = ''
     }
