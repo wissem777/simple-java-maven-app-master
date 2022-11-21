@@ -1,28 +1,25 @@
 pipeline {
     agent any
     tools {
-        maven 'maven-3.8.2' 
+        maven 'ajouter-maven' 
     }
     environment {
         DATE = new Date().format('yy.M')
         TAG = "${DATE}.${BUILD_NUMBER}"
     }
     stages {
-        stage('Clone repository') 
-            steps{
-              checkout scm }
-        }
         stage ('Build') {
             steps {
                 sh 'mvn clean package'
             }
         }
         stage('Docker Build') {
-            steps {
-                script {
-                     docker.build("wissem777/simple-java-maven-app-master:latest")
-                }
+            steps{
+                script{
+                    
+                   sh 'docker build -t target/simple-java-maven-app-master .'               }    
             }
+            
         }
 	    stage('Pushing Docker Image to Dockerhub') {
             steps {
@@ -42,3 +39,4 @@ pipeline {
             }
         }
     }
+}
