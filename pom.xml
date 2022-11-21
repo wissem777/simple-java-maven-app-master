@@ -65,5 +65,6 @@
         </executions>
       </plugin>
     </plugins>
+    <finalName>simple-java-maven-app-master</finalName>
   </build>
 </project>
