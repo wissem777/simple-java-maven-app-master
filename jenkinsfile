@@ -25,7 +25,7 @@ pipeline {
                    sh 'docker login -u wi77739ssem -p ${dockerhubpwd}'
 
 }
-                   sh 'docker push javatechie/devops-integration'
+                   sh 'docker push wi77739ssem/simple-java-maven-app'
                 }
             }
         }
